@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="11" failures="0" errors="0" time="0.0960495">
-    <testsuite name="src/App.test.tsx" timestamp="2026-01-13T11:36:00.987Z" hostname="Mac.lan" tests="11" failures="0" errors="0" skipped="10" time="0.0960495">
-        <testcase classname="src/App.test.tsx" name="App - Step 1: Basic Payment List &gt; should fetch and display payments in a table with page=1 and pageSize=5" time="0.094357875">
+<testsuites name="vitest tests" tests="11" failures="0" errors="0" time="0.100890375">
+    <testsuite name="src/App.test.tsx" timestamp="2026-01-13T18:55:39.584Z" hostname="Mac.lan" tests="11" failures="0" errors="0" skipped="10" time="0.100890375">
+        <testcase classname="src/App.test.tsx" name="App - Step 1: Basic Payment List &gt; should fetch and display payments in a table with page=1 and pageSize=5" time="0">
+            <skipped/>
         </testcase>
         <testcase classname="src/App.test.tsx" name="App - Step 2: Search by Payment ID &gt; should have a search input for payment ID" time="0">
             <skipped/>
@@ -9,8 +10,7 @@
         <testcase classname="src/App.test.tsx" name="App - Step 2: Search by Payment ID &gt; should search for payments by payment ID" time="0">
             <skipped/>
         </testcase>
-        <testcase classname="src/App.test.tsx" name="App - Step 3: Clear Filters &gt; should clear all filters when clear button is clicked" time="0">
-            <skipped/>
+        <testcase classname="src/App.test.tsx" name="App - Step 3: Clear Filters &gt; should clear all filters when clear button is clicked" time="0.098674208">
         </testcase>
         <testcase classname="src/App.test.tsx" name="App - Step 4: Handle Payment Not Found &gt; should display error message when payment ID is not found" time="0">
             <skipped/>
