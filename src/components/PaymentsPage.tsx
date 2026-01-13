@@ -1,6 +1,13 @@
+import { useState } from "react";
+import { usePaymentFilters } from "../hooks/usePaymentFilters";
+import { usePayments } from "../hooks/usePayments";
+import { getErrorMessage } from "../utils/errorHandler";
+import { I18N } from "../constants/i18n";
+import { formatPaymentDate, formatCurrency } from "../utils/formatters";
 import {
   ClearButton,
   Container,
+  ErrorBox,
   FilterRow,
   SearchButton,
   SearchInput,
@@ -16,29 +23,14 @@ import {
   TableWrapper,
   Title,
 } from "./components";
-import { useQuery } from "@tanstack/react-query";
-import { API_URL } from "../constants";
-import { I18N } from "../constants/i18n";
-import { Payment, PaymentSearchResponse } from "../types/payment";
-import { formatPaymentDate, formatCurrency } from "../utils/formatters";
-import { useState } from "react";
-import { usePaymentFilters } from "../hooks/usePaymentFilters";
+import { Payment } from "../types/payment";
 
 export const PaymentsPage = () => {
-  const { filters, updateSearch, clearFilters, hasActiveFilters } = usePaymentFilters();
+  const { filters, updateSearch, clearFilters, hasActiveFilters } =
+    usePaymentFilters();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { isPending, data } = useQuery<PaymentSearchResponse>({
-    queryKey: ["payments", { page: filters.page, pageSize: filters.pageSize, search: filters.search }],
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        page: filters.page.toString(),
-        pageSize: filters.pageSize.toString(),
-        ...(filters.search && { search: filters.search }),
-      });
-      return fetch(`${API_URL}?${params}`).then((res) => res.json());
-    },
-  });
+  const { isPending, data, error, isError } = usePayments(filters);
 
   const handleSearch = () => {
     updateSearch(searchTerm);
@@ -69,7 +61,9 @@ export const PaymentsPage = () => {
         )}
       </FilterRow>
 
-      {isPending ? (
+      {isError ? (
+        <ErrorBox>{getErrorMessage(error)}</ErrorBox>
+      ) : isPending ? (
         <Spinner />
       ) : (
         <TableWrapper>
