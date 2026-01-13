@@ -22,29 +22,31 @@ import { I18N } from "../constants/i18n";
 import { Payment, PaymentSearchResponse } from "../types/payment";
 import { formatPaymentDate, formatCurrency } from "../utils/formatters";
 import { useState } from "react";
+import { usePaymentFilters } from "../hooks/usePaymentFilters";
 
 export const PaymentsPage = () => {
+  const { filters, updateSearch, clearFilters, hasActiveFilters } = usePaymentFilters();
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeSearch, setActiveSearch] = useState("");
+
   const { isPending, data } = useQuery<PaymentSearchResponse>({
-    queryKey: ["payments", { page: 1, pageSize: 5, search: activeSearch }],
+    queryKey: ["payments", { page: filters.page, pageSize: filters.pageSize, search: filters.search }],
     queryFn: async () => {
       const params = new URLSearchParams({
-        page: "1",
-        pageSize: "5",
-        ...(activeSearch && { search: activeSearch }),
+        page: filters.page.toString(),
+        pageSize: filters.pageSize.toString(),
+        ...(filters.search && { search: filters.search }),
       });
       return fetch(`${API_URL}?${params}`).then((res) => res.json());
     },
   });
 
   const handleSearch = () => {
-    setActiveSearch(searchTerm);
+    updateSearch(searchTerm);
   };
 
   const handleClear = () => {
     setSearchTerm("");
-    setActiveSearch("");
+    clearFilters();
   };
 
   return (
@@ -62,7 +64,9 @@ export const PaymentsPage = () => {
         />
         <SearchButton onClick={handleSearch}>{I18N.SEARCH_BUTTON}</SearchButton>
 
-        <ClearButton onClick={handleClear}>{I18N.CLEAR_FILTERS}</ClearButton>
+        {hasActiveFilters() && (
+          <ClearButton onClick={handleClear}>{I18N.CLEAR_FILTERS}</ClearButton>
+        )}
       </FilterRow>
 
       {isPending ? (
