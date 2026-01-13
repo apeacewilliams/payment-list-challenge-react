@@ -1,4 +1,5 @@
 import {
+  ClearButton,
   Container,
   FilterRow,
   SearchButton,
@@ -41,6 +42,11 @@ export const PaymentsPage = () => {
     setActiveSearch(searchTerm);
   };
 
+  const handleClear = () => {
+    setSearchTerm("");
+    setActiveSearch("");
+  };
+
   return (
     <Container>
       <Title>{I18N.PAGE_TITLE}</Title>
@@ -55,6 +61,8 @@ export const PaymentsPage = () => {
           aria-label={I18N.SEARCH_LABEL}
         />
         <SearchButton onClick={handleSearch}>{I18N.SEARCH_BUTTON}</SearchButton>
+
+        <ClearButton onClick={handleClear}>{I18N.CLEAR_FILTERS}</ClearButton>
       </FilterRow>
 
       {isPending ? (
