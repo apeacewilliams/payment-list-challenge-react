@@ -12,6 +12,7 @@ export const usePayments = (filters: PaymentFilters) => {
         page: filters.page.toString(),
         pageSize: filters.pageSize.toString(),
         ...(filters.search && { search: filters.search }),
+        ...(filters.currency && { currency: filters.currency }),
       });
 
       const response = await fetch(`${API_URL}?${params}`);

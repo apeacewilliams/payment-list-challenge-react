@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { usePaymentFilters } from "../hooks/usePaymentFilters";
 import { usePayments } from "../hooks/usePayments";
 import { getErrorMessage } from "../utils/errorHandler";
@@ -11,6 +11,7 @@ import {
   FilterRow,
   SearchButton,
   SearchInput,
+  Select,
   Spinner,
   StatusBadge,
   Table,
@@ -24,13 +25,29 @@ import {
   Title,
 } from "./components";
 import { Payment } from "../types/payment";
+import { CURRENCIES } from "../constants";
 
 export const PaymentsPage = () => {
-  const { filters, updateSearch, clearFilters, hasActiveFilters } =
-    usePaymentFilters();
+  const {
+    filters,
+    updateSearch,
+    clearFilters,
+    hasActiveFilters,
+    updateCurrency,
+  } = usePaymentFilters();
   const [searchTerm, setSearchTerm] = useState("");
 
   const { isPending, data, error, isError } = usePayments(filters);
+
+  const currencyOptions = useMemo(
+    () =>
+      CURRENCIES.map((currency) => (
+        <option key={currency} value={currency}>
+          {currency}
+        </option>
+      )),
+    []
+  );
 
   const handleSearch = () => {
     updateSearch(searchTerm);
@@ -54,6 +71,16 @@ export const PaymentsPage = () => {
           role="searchbox"
           aria-label={I18N.SEARCH_LABEL}
         />
+
+        <Select
+          aria-label={I18N.CURRENCY_FILTER_LABEL}
+          value={filters.currency}
+          onChange={(e) => updateCurrency(e.target.value)}
+        >
+          <option value="">{I18N.CURRENCIES_OPTION}</option>
+          {currencyOptions}
+        </Select>
+
         <SearchButton onClick={handleSearch}>{I18N.SEARCH_BUTTON}</SearchButton>
 
         {hasActiveFilters() && (
