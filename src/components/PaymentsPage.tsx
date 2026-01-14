@@ -46,7 +46,7 @@ export const PaymentsPage = () => {
           {currency}
         </option>
       )),
-    []
+    [],
   );
 
   const handleSearch = () => {
@@ -68,6 +68,11 @@ export const PaymentsPage = () => {
           placeholder={I18N.SEARCH_PLACEHOLDER}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearch();
+            }
+          }}
           role="searchbox"
           aria-label={I18N.SEARCH_LABEL}
         />
@@ -89,12 +94,17 @@ export const PaymentsPage = () => {
       </FilterRow>
 
       {isError ? (
-        <ErrorBox>{getErrorMessage(error)}</ErrorBox>
+        <ErrorBox role="alert">{getErrorMessage(error)}</ErrorBox>
       ) : isPending ? (
-        <Spinner />
+        <div role="status" aria-live="polite">
+          <Spinner />
+        </div>
       ) : (
         <TableWrapper>
           <Table>
+            <caption className="sr-only">
+              Payment transactions table showing {data?.total || 0} results
+            </caption>
             <TableHeaderWrapper>
               <TableHeaderRow>
                 <TableHeader>{I18N.TABLE_HEADER_PAYMENT_ID}</TableHeader>
